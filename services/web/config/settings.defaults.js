@@ -805,7 +805,8 @@ module.exports = {
 
     right_footer: [
       {
-        text: '<a href="https://github.com/overleaf/overleaf">Fork on GitHub!</a>',
+        text: "<i class='fa fa-github-square'></i> Fork on GitHub!",
+        url: 'https://github.com/lcpu-club/overleaf',
       },
     ],
 
