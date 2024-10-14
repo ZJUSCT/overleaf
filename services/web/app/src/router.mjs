@@ -1025,6 +1025,45 @@ async function initialize(webRouter, privateApiRouter, publicApiRouter) {
       PermissionsController.requirePermission('chat'),
       ChatController.editMessage
     )
+    webRouter.get(
+      '/project/:project_id/threads',
+      AuthorizationMiddleware.blockRestrictedUserFromProject,
+      AuthorizationMiddleware.ensureUserCanReadProject,
+      PermissionsController.requirePermission('chat'),
+      ChatController.getThreads
+    )
+    webRouter.post(
+      '/project/:project_id/thread/:thread_id/messages',
+      AuthorizationMiddleware.blockRestrictedUserFromProject,
+      AuthorizationMiddleware.ensureUserCanReadProject,
+      PermissionsController.requirePermission('chat'),
+      RateLimiterMiddleware.rateLimit(rateLimiters.sendChatMessage),
+      ChatController.sendComment
+    )
+    webRouter.delete(
+      '/project/:project_id/thread/:thread_id/messages/:message_id',
+      AuthorizationMiddleware.blockRestrictedUserFromProject,
+      AuthorizationMiddleware.ensureUserCanReadProject,
+      AuthorizationMiddleware.ensureUserIsMessageAuthor,
+      PermissionsController.requirePermission('chat'),
+      ChatController.deleteThreadMessage
+    )
+    webRouter.post(
+      '/project/:project_id/thread/:thread_id/messages/:message_id/edit',
+      AuthorizationMiddleware.blockRestrictedUserFromProject,
+      AuthorizationMiddleware.ensureUserCanReadProject,
+      AuthorizationMiddleware.ensureUserIsMessageAuthor,
+      PermissionsController.requirePermission('chat'),
+      ChatController.editThreadMessage
+    )
+    webRouter.post(
+      '/project/:project_id/doc/:doc_id/thread/:thread_id/resolve',
+      AuthorizationMiddleware.blockRestrictedUserFromProject,
+      AuthorizationMiddleware.ensureUserCanReadProject,
+      PermissionsController.requirePermission('chat'),
+      RateLimiterMiddleware.rateLimit(rateLimiters.sendChatMessage),
+      ChatController.resolveThread
+    )
   }
 
   webRouter.post(
