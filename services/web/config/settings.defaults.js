@@ -275,6 +275,9 @@ module.exports = {
     webpack: {
       url: `http://${process.env.WEBPACK_HOST || '127.0.0.1'}:3808`,
     },
+    llm:{
+      url: `http://${process.env.LLM_HOST || '127.0.0.1'}:3012`,
+    },
     wiki: {
       url: process.env.WIKI_URL || 'https://learnwiki.overleaf.com',
       maxCacheAge: parseInt(process.env.WIKI_MAX_CACHE_AGE || 5 * minutes, 10),

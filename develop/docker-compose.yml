@@ -138,6 +138,8 @@ services:
       dockerfile: services/real-time/Dockerfile
     env_file:
       - dev.env
+    environment:
+      - SESSION_SECRET=helloworld
 
   redis:
     image: redis:7
@@ -145,6 +147,16 @@ services:
       - "127.0.0.1:6379:6379" # for debugging
     volumes:
       - redis-data:/data
+
+  llm:
+    build:
+      context: ..
+      dockerfile: services/llm/Dockerfile
+    env_file:
+      - dev.env
+    depends_on:
+      - mongo
+      - redis
 
   web:
     build:
@@ -177,8 +189,10 @@ services:
       - references
       - project-history
       - real-time
+      - llm
 
   webpack:
+    user: root
     build:
       context: ..
       dockerfile: services/web/Dockerfile

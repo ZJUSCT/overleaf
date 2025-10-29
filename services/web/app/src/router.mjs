@@ -36,6 +36,7 @@ import PasswordResetRouter from './Features/PasswordReset/PasswordResetRouter.mj
 import StaticPagesRouter from './Features/StaticPages/StaticPagesRouter.mjs'
 import ChatController from './Features/Chat/ChatController.mjs'
 import Modules from './infrastructure/Modules.mjs'
+import LlmController from './Features/Llm/LlmController.js'
 import {
   RateLimiter,
   openProjectRateLimiter,
@@ -227,6 +228,31 @@ async function initialize(webRouter, privateApiRouter, publicApiRouter) {
     RateLimiterMiddleware.rateLimit(rateLimiters.canSkipCaptcha),
     CaptchaMiddleware.canSkipCaptcha
   )
+
+  // LLM API routes - disable CSRF protection for API endpoints
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/completion', 'POST')
+  webRouter.post('/api/v1/llm/completion', LlmController.createCompletion)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/llm', 'POST')
+  webRouter.post('/api/v1/llm/llm', LlmController.llm)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/keys', 'POST')
+  webRouter.post('/api/v1/llm/keys', LlmController.keys)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/keys', 'DELETE')
+  webRouter.delete('/api/v1/llm/keys', LlmController.keys)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/keys', 'GET')
+  webRouter.get('/api/v1/llm/keys', LlmController.keys)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/usingLlm', 'GET')
+  webRouter.get('/api/v1/llm/usingLlm', LlmController.usingLlm)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/usingLlm', 'PUT')
+  webRouter.put('/api/v1/llm/usingLlm', LlmController.usingLlm)
+
+  webRouter.csrf.disableDefaultCsrfProtection('/api/v1/llm/usingModel', 'PUT')
+  webRouter.put('/api/v1/llm/usingModel', LlmController.usingModel)
 
   webRouter.get('/login', UserPagesController.loginPage)
   AuthenticationController.addEndpointToLoginWhitelist('/login')

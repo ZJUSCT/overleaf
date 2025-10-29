@@ -23,6 +23,7 @@ import OLCol from '@/shared/components/ol/ol-col'
 import OLPageContentCard from '@/shared/components/ol/ol-page-content-card'
 import { isSplitTestEnabled } from '@/utils/splitTestUtils'
 import NotificationsSection from './notifications-section'
+import LlmUsageTable from './llm/LlmUsageTable'
 
 function SettingsPageRoot() {
   const { isReady } = useWaitForI18n()
@@ -65,6 +66,7 @@ function SettingsPageContent() {
               <PasswordSection />
             </OLCol>
           </OLRow>
+          <LlmUsageTable/>
           <hr />
           <SecuritySection />
           <SSOProvider>
