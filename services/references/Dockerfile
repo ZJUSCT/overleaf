@@ -1,4 +1,4 @@
-FROM node:18.20.2 AS base
+FROM node:20.19.5 AS base
 
 WORKDIR /overleaf/services/references
 
@@ -13,7 +13,7 @@ COPY services/references/package.json /overleaf/services/references/
 COPY libraries/ /overleaf/libraries/
 COPY patches/ /overleaf/patches/
 
-RUN cd /overleaf && npm ci --quiet
+RUN cd /overleaf && npm install
 
 COPY services/references/ /overleaf/services/references/
 
